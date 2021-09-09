@@ -375,7 +375,7 @@ export default class TabBar<T extends Route> extends React.Component<
                   },
                 },
               ],
-              { useNativeDriver: true }
+              { useNativeDriver: false }
             )}
             ref={this.scrollViewRef}
           >
