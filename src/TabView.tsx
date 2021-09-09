@@ -17,13 +17,15 @@ import type {
   PagerProps,
 } from './types';
 
+export type RenderTabBarParams = SceneRendererProps & { navigationState: NavigationState<T> }
+
 export type Props<T extends Route> = PagerProps & {
   onIndexChange: (index: number) => void;
   navigationState: NavigationState<T>;
   renderScene: (props: SceneRendererProps & { route: T }) => React.ReactNode;
   renderLazyPlaceholder?: (props: { route: T }) => React.ReactNode;
   renderTabBar?: (
-    props: SceneRendererProps & { navigationState: NavigationState<T> }
+    props: RenderTabBarParams
   ) => React.ReactNode;
   tabBarPosition?: 'top' | 'bottom';
   initialLayout?: Partial<Layout>;
