@@ -59,6 +59,7 @@ export type Props<T extends Route> = SceneRendererProps & {
   labelStyle?: StyleProp<TextStyle>;
   contentContainerStyle?: StyleProp<ViewStyle>;
   style?: StyleProp<ViewStyle>;
+  horizontalPadding: number
 };
 
 type State = {
@@ -71,6 +72,7 @@ export default class TabBar<T extends Route> extends React.Component<
   State
 > {
   static defaultProps = {
+    horizontalPadding: 0,
     getLabelText: ({ route }: Scene<Route>) => route.title,
     getAccessible: ({ route }: Scene<Route>) =>
       typeof route.accessible !== 'undefined' ? route.accessible : true,
@@ -90,6 +92,10 @@ export default class TabBar<T extends Route> extends React.Component<
     layout: { width: 0, height: 0 },
     tabWidths: {},
   };
+
+  get tabHorizontalPadding(): number {
+    return this.props.horizontalPadding ?? 0
+  }
 
   componentDidUpdate(prevProps: Props<T>, prevState: State) {
     const { navigationState } = this.props;
@@ -235,12 +241,12 @@ export default class TabBar<T extends Route> extends React.Component<
   };
 
   private resetScroll = (index: number) => {
-    if (this.props.scrollEnabled) {
-      this.scrollViewRef.current?.scrollTo({
-        x: this.getScrollAmount(this.props, this.state, index),
-        animated: true,
-      });
-    }
+    if (!this.props.scrollEnabled) return
+    const x = this.getScrollAmount(this.props, this.state, index)
+    this.scrollViewRef.current?.scrollTo({
+      x: x === 0 ? -(this.tabHorizontalPadding * 2) : x + (this.tabHorizontalPadding * 2),
+      animated: true,
+    });
   };
 
   private handleLayout = (e: LayoutChangeEvent) => {
@@ -321,6 +327,7 @@ export default class TabBar<T extends Route> extends React.Component<
           style={[
             styles.indicatorContainer,
             scrollEnabled ? { transform: [{ translateX }] as any } : null,
+            {left: this.tabHorizontalPadding},
             tabBarWidth
               ? { width: tabBarWidth }
               : scrollEnabled
@@ -361,9 +368,10 @@ export default class TabBar<T extends Route> extends React.Component<
             overScrollMode="never"
             contentContainerStyle={[
               styles.tabContent,
-              scrollEnabled
-                ? { width: tabBarWidth || tabBarWidthPercent }
-                : styles.container,
+              {paddingHorizontal: this.props.horizontalPadding},
+              // scrollEnabled
+              //   ? { width: tabBarWidth || tabBarWidthPercent }
+              //   : styles.container,
               contentContainerStyle,
             ]}
             scrollEventThrottle={16}
