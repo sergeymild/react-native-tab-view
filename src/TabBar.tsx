@@ -369,9 +369,7 @@ export default class TabBar<T extends Route> extends React.Component<
             contentContainerStyle={[
               styles.tabContent,
               {paddingHorizontal: this.props.horizontalPadding},
-              // scrollEnabled
-              //   ? { width: tabBarWidth || tabBarWidthPercent }
-              //   : styles.container,
+              !scrollEnabled && styles.container,
               contentContainerStyle,
             ]}
             scrollEventThrottle={16}
