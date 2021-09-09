@@ -3,6 +3,7 @@
   "version": "3.1.1",
   "description": "Tab view component for React Native",
   "main": "src/index.tsx",
+  "module": "src/index.tsx",
   "react-native": "src/index.tsx",
   "files": [
     "src",
