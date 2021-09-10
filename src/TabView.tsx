@@ -17,7 +17,7 @@ import type {
   PagerProps,
 } from './types';
 
-export type RenderTabBarParams = SceneRendererProps & { navigationState: NavigationState<T> }
+export type RenderTabBarParams = SceneRendererProps & { navigationState: NavigationState<any> }
 
 export type Props<T extends Route> = PagerProps & {
   onIndexChange: (index: number) => void;
@@ -98,7 +98,7 @@ export default function TabView<T extends Route>({
 
           return (
             <React.Fragment>
-              {tabBarPosition === 'top' &&
+              {tabBarPosition === 'top' && navigationState.routes.length > 1 &&
                 renderTabBar({
                   ...sceneRendererProps,
                   navigationState,
@@ -128,7 +128,7 @@ export default function TabView<T extends Route>({
                   );
                 })
               )}
-              {tabBarPosition === 'bottom' &&
+              {tabBarPosition === 'bottom' && navigationState.routes.length > 1 &&
                 renderTabBar({
                   ...sceneRendererProps,
                   navigationState,
